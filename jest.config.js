@@ -1,4 +1,5 @@
 module.exports = {
+  type: "commonjs",
   testEnvironment: 'node',
   transform: {
     '^.+\\.js$': 'babel-jest'
