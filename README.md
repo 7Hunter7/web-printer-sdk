@@ -5,23 +5,46 @@
 web-printer-sdk/
 ├── src/
 │   ├── core/
-│   │   ├── PrinterManager.js      # Главный менеджер
-│   │   ├── BasePrinter.js         # Абстрактный класс
-│   │   └── PrinterError.js        # Кастомные ошибки
+│   │   ├── BasePrinter.js              # Абстрактный класс
+│   │   ├── PrinterManager.js           # Главный менеджер
+│   │   └── PrinterError.js             # Кастомные ошибки
 │   ├── printers/
-│   │   ├── WifiPrinter.js
-│   │   ├── BluetoothPrinter.js
-│   │   ├── UsbPrinter.js
-│   │   └── ThermalPrinter.js      # ESC/POS команды
+│   │   ├── WifiPrinter.js              # WiFi принтер
+│   │   ├── BluetoothPrinter.js         # Bluetooth принтер
+│   │   ├── UsbPrinter.js               # USB принтер
+│   │   ├── ThermalPrinter.js           # Термический принтер
+│   │   └── VirtualPrinter.js           # Для тестирования
 │   ├── adapters/
-│   │   ├── BrowserAdapter.js      # WebUSB, WebBluetooth
-│   │   └── NodeAdapter.js         # serialport, usb, net
+│   │   ├── BrowserAdapter.js           # WebUSB, WebBluetooth
+│   │   ├── NodeAdapter.js              # serialport, usb, net
+│   │   └── index.js
+│   ├── formats/
+│   │   ├── escpos.js                   # ESC/POS команды
+│   │   ├── zpl.js                      # ZPL команды
+│   │   ├── html.js                     # HTML в печать
+│   │   └── index.js
 │   ├── utils/
-│   │   ├── escpos.js              # ESC/POS команды
-│   │   ├── zpl.js                 # ZPL команды
-│   │   └── imageProcessor.js
-│   └── index.js
+│   │   ├── imageProcessor.js           # Обработка изображений
+│   │   ├── barcode.js                  # Генерация штрихкодов
+│   │   └── helpers.js
+│   ├── vue/
+│   │   ├── printerMixin.js             # Vue миксин
+│   │   └── PrinterSettings.vue         # Компонент настроек
+│   └── index.js                        # Главный экспорт
+├── tests/
+│   ├── unit/
+│   │   ├── WifiPrinter.test.js
+│   │   ├── BluetoothPrinter.test.js
+│   │   ├── UsbPrinter.test.js
+│   │   └── escpos.test.js
+│   └── integration/
+│       └── printerManager.test.js
+├── examples/
+│   ├── vue2-example.vue
+│   ├── vue3-example.vue
+│   └── node-example.js
 ├── dist/
+├── index.d.ts
 ├── README.md
 ├── package.json
 └── LICENSE
