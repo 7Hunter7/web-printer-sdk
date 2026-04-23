@@ -1,0 +1,40 @@
+{
+  "name": "web-printer-sdk",
+  "version": "1.0.0",
+  "description": "Профессиональная библиотека для подключения принтеров к веб-приложению",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "browser": "src/index.js",
+  "types": "index.d.ts",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "echo \"No tests in production\" && exit 0"
+  },
+  "keywords": [
+
+  ],
+  "author": {
+    "name": "Ivan Kalugin",
+    "email": "i.am.hunter.777.ih@gmail.com",
+    "url": "https://github.com/7Hunter7"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7Hunter7/repo"
+  },
+  "bugs": {
+    "url": "https://github.com/7Hunter7/repo/issues"
+  },
+  "homepage": "https://github.com/7Hunter7/repo#readme",
+  "peerDependencies": {
+    "vue": "^2.6.0 || ^3.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
