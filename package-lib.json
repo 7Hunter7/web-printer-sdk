@@ -13,18 +13,18 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:unit": "jest tests/unit",
-    "test:integration": "jest tests/integration"
+    "test": "echo \"No tests in production\" && exit 0"
   },
-  "devDependencies": {
-    "jest": "^29.0.0",
-    "babel-jest": "^29.0.0",
-    "@babel/core": "^7.24.0",
-    "@babel/preset-env": "^7.24.0"
-  },
+  "keywords": [
+    "printer",
+    "escpos",
+    "thermal-printer",
+    "bluetooth-printer",
+    "usb-printer",
+    "wifi-printer",
+    "receipt-printer",
+    "web-printing"
+  ],
   "author": {
     "name": "Ivan Kalugin",
     "email": "i.am.hunter.777.ih@gmail.com",
