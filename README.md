@@ -233,4 +233,3 @@ MIT © [Ivan Kalugin](https://github.com/7Hunter7)
 <p align="center">
   Сделано с ❤️ для удобной печати в веб-приложениях
 </p>
-```
