@@ -1,13 +1,13 @@
 {
   "name": "web-printer-sdk",
   "version": "1.0.0",
-  "description": "Профессиональный пакет SDK для веб-приложений. Поддерживает принтеры Wi-Fi, Bluetooth, USB и Thermal с помощью команд ESC /POS.",
+  "description": "Профессиональный пакет SDK для подключения принтеров к веб-приложениям. Поддерживает Wi-Fi, Bluetooth, USB и термические принтеры с ESC/POS и ZPL командами.",
   "main": "src/index.js",
   "module": "src/index.js",
   "browser": "src/index.js",
   "types": "index.d.ts",
   "files": [
-    "dist",
+    "src",
     "index.d.ts",
     "README.md",
     "LICENSE"
@@ -18,12 +18,17 @@
   "keywords": [
     "printer",
     "escpos",
+    "zpl",
     "thermal-printer",
     "bluetooth-printer",
     "usb-printer",
     "wifi-printer",
     "receipt-printer",
-    "web-printing"
+    "web-printing",
+    "vue-printer",
+    "vue",
+    "vue2",
+    "vue3"
   ],
   "author": {
     "name": "Ivan Kalugin",
@@ -33,7 +38,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/7Hunter7/web-printer-sdk"
+    "url": "git+https://github.com/7Hunter7/web-printer-sdk.git"
   },
   "bugs": {
     "url": "https://github.com/7Hunter7/web-printer-sdk/issues"
