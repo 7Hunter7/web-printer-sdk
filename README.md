@@ -35,7 +35,7 @@ yarn add web-printer-sdk
 ### Базовое использование
 
 ```javascript
-import { PrinterManager, createReceipt } from 'web-printer-sdk';
+import {PrinterManager, createReceipt} from 'web-printer-sdk';
 
 // 1. Создаем менеджер
 const manager = new PrinterManager();
