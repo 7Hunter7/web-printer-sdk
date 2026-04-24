@@ -1,6 +1,6 @@
 import BasePrinter from '../core/BasePrinter.js';
 import { PrinterError, ErrorCodes } from '../core/PrinterError.js';
-import { ESCPOS, createTextLine, createReceipt } from '../formats/escpos.js';
+import { ESCPOS, createTextLine, createReceipt } from '../utils/escpos.js';
 
 class ThermalPrinter extends BasePrinter {
   constructor(config = {}) {
