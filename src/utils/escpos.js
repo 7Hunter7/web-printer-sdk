@@ -1,3 +1,5 @@
+import iconv from 'iconv-lite';
+
 export const ESCPOS = {
   // Инициализация
   init: [0x1B, 0x40],
@@ -26,7 +28,8 @@ export const ESCPOS = {
   cutFull: [0x1D, 0x56, 0x42, 0x00],
   
   // Текст
-  text: (str) => Buffer.from(str, 'cp866'), // Для кириллицы
+  text: (str) => iconv.encode(str + '\n', 'cp866'), // Для кириллицы
+  // text: (str) =>  Buffer.from(str, 'utf8'); // Без кодировки
   
   // Штрихкод
   barcode: {
