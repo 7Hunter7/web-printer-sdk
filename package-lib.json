@@ -1,7 +1,7 @@
 {
   "name": "web-printer-sdk",
   "version": "1.0.0",
-  "description": "Профессиональный пакет SDK для подключения принтеров к веб-приложениям. Поддерживает Wi-Fi, Bluetooth, USB и термические принтеры с ESC/POS и ZPL командами.",
+  "description": "Профессиональный пакет SDK для подключения принтеров к веб-приложениям. Поддерживает Wi-Fi, Bluetooth, USB и термопринтеры с ESC/POS и ZPL командами.",
   "main": "src/index.js",
   "module": "src/index.js",
   "browser": "src/index.js",
