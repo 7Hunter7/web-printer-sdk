@@ -32,7 +32,7 @@ const mockUsbDevice = {
 
 jest.mock("usb", () => ({
   getDeviceList: jest.fn().mockReturnValue([mockUsbDevice]),
-}));
+}), { virtual: true });
 
 describe("UsbPrinter", () => {
   let printer;
