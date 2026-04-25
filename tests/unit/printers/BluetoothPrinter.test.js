@@ -1,5 +1,6 @@
 import BluetoothPrinter from "../../../src/printers/BluetoothPrinter.js";
 import { PrinterError, ErrorCodes } from "../../../src/core/PrinterError.js";
+const isNodeEnvironment = typeof window === 'undefined';
 
 // Мокаем serialport
 jest.mock(
@@ -57,6 +58,8 @@ jest.mock(
 );
 
 describe("BluetoothPrinter", () => {
+  // Пропускаем тесты, требующие SerialPort, если не в Node
+  const testOrSkip = isNodeEnvironment ? test : test.skip;
   let printer;
 
   beforeEach(() => {
