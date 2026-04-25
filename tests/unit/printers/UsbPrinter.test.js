@@ -203,14 +203,16 @@ describe("UsbPrinter", () => {
     });
 
     test("should handle transfer errors", async () => {
-      mockUsbInterface.endpoints[0].transfer.mockImplementationOnce(
-        (data, callback) => {
-          process.nextTick(() => callback(new Error("Transfer failed")));
-        },
-      );
+      const printers = await printer.discover();
+      await printer.connect(printers[0]);
+
+      // Мокаем ошибку передачи
+      printer.endpoint.transfer.mockImplementationOnce((data, callback) => {
+        process.nextTick(() => callback(new Error("Transfer failed")));
+      });
 
       await expect(printer.print("test")).rejects.toThrow(
-        ErrorCodes.PRINT_FAILED,
+        expect.objectContaining({ code: ErrorCodes.PRINT_FAILED }),
       );
     });
   });
