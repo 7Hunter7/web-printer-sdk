@@ -1,6 +1,7 @@
 import BasePrinter from '../core/BasePrinter.js';
 import { PrinterError, ErrorCodes } from '../core/PrinterError.js';
 import { ESCPOS, createTextLine, createReceipt } from '../utils/escpos.js';
+import iconv from 'iconv-lite';
 
 class ThermalPrinter extends BasePrinter {
   constructor(config = {}) {
@@ -94,7 +95,7 @@ class ThermalPrinter extends BasePrinter {
       commands.push(this.fontSize(options.fontSize));
     }
     
-    commands.push(Buffer.from(str, this.charSet));
+    commands.push(iconv.encode(str, this.charSet));
     commands.push(Buffer.from([0x0A]));
     
     if (options.bold) {
