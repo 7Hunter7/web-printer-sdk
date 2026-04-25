@@ -30,6 +30,24 @@
     "vue2",
     "vue3"
   ],
+  "dependencies": {
+    "iconv-lite": "^0.7.2"
+  },
+  "optionalDependencies": {
+    "serialport": "^13.0.0",
+    "usb": "^2.17.0",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "peerDependencies": {
+    "vue": "^2.6.0 || ^3.0.0"
+  },
   "author": {
     "name": "Ivan Kalugin",
     "email": "i.am.hunter.777.ih@gmail.com",
@@ -44,9 +62,6 @@
     "url": "https://github.com/7Hunter7/web-printer-sdk/issues"
   },
   "homepage": "https://github.com/7Hunter7/web-printer-sdk#readme",
-  "peerDependencies": {
-    "vue": "^2.6.0 || ^3.0.0"
-  },
   "engines": {
     "node": ">=12.0.0"
   }
