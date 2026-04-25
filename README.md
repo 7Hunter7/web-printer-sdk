@@ -6,6 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
 [![Vue 2 & 3](https://img.shields.io/badge/Vue-2.x%20%7C%203.x-brightgreen)](https://vuejs.org/)
 [![Tests](<https://img.shields.io/badge/tests-66%20passed%20(87%25)-success>)](https://github.com/7Hunter7/web-printer-sdk)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/web-printer-sdk)](https://bundlephobia.com/package/web-printer-sdk)
 
 > Профессиональный SDK для подключения принтеров к веб-приложениям.  
 > Поддерживает WiFi, Bluetooth, USB и термические принтеры с ESC/POS и ZPL командами.
@@ -21,6 +22,14 @@
 - 🎨 **Vue.js интеграция** — миксины для Vue 2 и 3
 - 📝 **TypeScript** — полная типизация
 - 🧪 **86% тестов** — высокое покрытие кода
+
+## 📦 Размер пакета
+
+| Метрика                  | Значение                   |
+| ------------------------ | -------------------------- |
+| **Сжатый (npm install)** | ~26 KB                     |
+| **Распакованный**        | ~43 KB                     |
+| **Зависимости**          | 1 (`iconv-lite` для cp866) |
 
 ## 📦 Установка
 
