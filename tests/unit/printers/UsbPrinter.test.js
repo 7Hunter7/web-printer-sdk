@@ -66,8 +66,11 @@ describe("UsbPrinter", () => {
         throw new Error("USB enumeration failed");
       });
 
-      const printers = await printer.discover();
-      expect(printers).toEqual([]);
+      // Ожидаем, что discover выбросит ошибку
+      await expect(printer.discover()).rejects.toThrow(PrinterError);
+      await expect(printer.discover()).rejects.toThrow(
+        expect.objectContaining({ code: ErrorCodes.DISCOVERY_FAILED }),
+      );
 
       usb.getDeviceList = originalGetDeviceList;
     });
