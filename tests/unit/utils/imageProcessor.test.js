@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import ImageProcessorClass from '../../../src/utils/imageProcessor.js';
+import ImageProcessorClass from "../../../src/utils/imageProcessor.js";
 const ImageProcessor = ImageProcessorClass;
 
 // Мокаем sharp
@@ -9,7 +9,16 @@ jest.mock("sharp", () => {
     grayscale: jest.fn().mockReturnThis(),
     threshold: jest.fn().mockReturnThis(),
     png: jest.fn().mockReturnThis(),
-    toBuffer: jest.fn().mockResolvedValue(Buffer.from("test")),
+    raw: jest.fn().mockReturnThis(),
+    toBuffer: jest.fn().mockImplementation((options) => {
+      if (options?.resolveWithObject) {
+        return Promise.resolve({
+          data: Buffer.from([0, 0, 0, 0]), // 4 пикселя (черные)
+          info: { width: 2, height: 2 },
+        });
+      }
+      return Promise.resolve(Buffer.from("test"));
+    }),
     resize: jest.fn().mockReturnThis(),
     metadata: jest.fn().mockResolvedValue({ width: 100, height: 100 }),
   }));
