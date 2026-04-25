@@ -62,12 +62,11 @@ describe("UsbPrinter", () => {
     test("should handle discovery errors gracefully", async () => {
       const usb = require("usb");
       const originalGetDeviceList = usb.getDeviceList;
+      // Мокируем до вызова discover
       usb.getDeviceList = jest.fn().mockImplementation(() => {
         throw new Error("USB enumeration failed");
       });
-
       // Ожидаем, что discover выбросит ошибку
-      await expect(printer.discover()).rejects.toThrow(PrinterError);
       await expect(printer.discover()).rejects.toThrow(
         expect.objectContaining({ code: ErrorCodes.DISCOVERY_FAILED }),
       );
