@@ -172,7 +172,8 @@ describe("UsbPrinter", () => {
       const testData = Buffer.from([0x1b, 0x40, 0x1d, 0x56, 0x41, 0x00]);
       const result = await printer.print(testData);
 
-      expect(result).toEqual({ success: true });
+      expect(result.success).toBe(true);
+      expect(result.bytesWritten).toBe(testData.length);
       expect(printer.endpoint.transfer).toHaveBeenCalledWith(
         testData,
         expect.any(Function),
