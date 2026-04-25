@@ -68,6 +68,12 @@ class ImageProcessor {
     const monochrome = await this.convertToMonochrome(resized, threshold);
     // Получаем метаданные
     const metadata = await sharp(monochrome).metadata();
+
+    // Получаем RAW данные пикселей
+    const { data } = await sharp(monochrome)
+      .raw() // нужен для получения сырых данных пикселей
+      .toBuffer({ resolveWithObject: true });
+
     // Генерируем ESC/POS команды для изображения
     const commands = [];
     // Команда для печати изображения (ESC * для графики)
@@ -77,10 +83,6 @@ class ImageProcessor {
     const widthBytes = Math.ceil(metadata.width / 8);
     commands.push((widthBytes >> 8) & 0xff, widthBytes & 0xff);
     commands.push((metadata.height >> 8) & 0xff, metadata.height & 0xff);
-    // Получаем данные пикселей
-    const { data } = await sharp(monochrome)
-    // .raw() устарел, данные уже в raw формате
-    .toBuffer({ resolveWithObject: true });
 
     // Конвертируем в битовую маску
     const bitData = this.convertToBitMask(
@@ -106,7 +108,7 @@ class ImageProcessor {
         let byte = 0;
         for (let bit = 0; bit < 8; bit++) {
           if (x + bit < width) {
-            const idx = (y * width) + (x + bit);
+            const idx = y * width + (x + bit);
             const pixel = pixels[idx];
             // Если пиксель темный (черный) - ставим 1
             if (pixel < 128) {
