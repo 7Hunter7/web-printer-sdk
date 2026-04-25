@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/web-printer-sdk.svg)](https://www.npmjs.com/package/web-printer-sdk)
 [![npm downloads](https://img.shields.io/npm/dm/web-printer-sdk.svg)](https://www.npmjs.com/package/web-printer-sdk)
-[![license](https://img.shields.io/npm/l/web-printer-sdk.svg)](https://github.com/7Hunter7/web-printer-sdk/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/web-printer-sdk.svg)](https://github.com/7Hunter7/web-printer-sdk/blob/master/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
 [![Vue 2 & 3](https://img.shields.io/badge/Vue-2.x%20%7C%203.x-brightgreen)](https://vuejs.org/)
 [![Tests](<https://img.shields.io/badge/tests-66%20passed%20(87%25)-success>)](https://github.com/7Hunter7/web-printer-sdk)
