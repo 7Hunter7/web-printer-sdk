@@ -61,12 +61,15 @@ describe("UsbPrinter", () => {
 
     test("should handle discovery errors gracefully", async () => {
       const usb = require("usb");
-      usb.getDeviceList.mockImplementationOnce(() => {
+      const originalGetDeviceList = usb.getDeviceList;
+      usb.getDeviceList = jest.fn().mockImplementation(() => {
         throw new Error("USB enumeration failed");
       });
 
       const printers = await printer.discover();
       expect(printers).toEqual([]);
+
+      usb.getDeviceList = originalGetDeviceList;
     });
   });
 
