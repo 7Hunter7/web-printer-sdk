@@ -2,24 +2,29 @@ import BluetoothPrinter from "../../../src/printers/BluetoothPrinter.js";
 import { PrinterError, ErrorCodes } from "../../../src/core/PrinterError.js";
 
 // Мокаем serialport
-jest.mock("serialport", () => ({
+jest.mock("serialport", () => {
+  const mockWrite = jest.fn((data, callback) => {
+    if (callback) process.nextTick(() => callback(null));
+    return true;
+  });
+
+  const mockDrain = jest.fn((callback) => {
+    process.nextTick(() => callback());
+  });
+
+  return {
     SerialPort: class {
       constructor(config) {
         this.config = config;
         this.isOpen = true;
+        this.write = mockWrite;
+        this.drain = mockDrain;
       }
       on(event, callback) {
         if (event === "open") {
           process.nextTick(() => callback());
         }
         return this;
-      }
-      write(data, callback) {
-        process.nextTick(() => callback(null));
-        return true;
-      }
-      drain(callback) {
-        process.nextTick(() => callback());
       }
       close() {}
     },
@@ -35,7 +40,7 @@ jest.mock("serialport", () => ({
         pnpId: "BLUETOOTH\\DEVICE\\5678",
       },
     ]),
-  }),
+  }},
   { virtual: false },
 );
 
