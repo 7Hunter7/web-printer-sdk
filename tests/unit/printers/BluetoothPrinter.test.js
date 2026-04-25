@@ -36,6 +36,7 @@ jest.mock("serialport", () => ({
       manufacturer: "Generic USB Device",
       pnpId: "USB\\DEVICE\\9012",
     },
+    { virtual: true },
   ]),
 }));
 
