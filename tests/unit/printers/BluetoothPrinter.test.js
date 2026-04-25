@@ -3,42 +3,41 @@ import { PrinterError, ErrorCodes } from "../../../src/core/PrinterError.js";
 
 // Мокаем serialport
 jest.mock("serialport", () => ({
-  SerialPort: jest.fn().mockImplementation((config) => ({
-    on: jest.fn((event, callback) => {
-      if (event === "open") {
+    SerialPort: class {
+      constructor(config) {
+        this.config = config;
+        this.isOpen = true;
+      }
+      on(event, callback) {
+        if (event === "open") {
+          process.nextTick(() => callback());
+        }
+        return this;
+      }
+      write(data, callback) {
+        process.nextTick(() => callback(null));
+        return true;
+      }
+      drain(callback) {
         process.nextTick(() => callback());
       }
-      return { on: jest.fn() };
-    }),
-    write: jest.fn((data, callback) => {
-      process.nextTick(() => callback(null));
-      return true;
-    }),
-    drain: jest.fn((callback) => {
-      process.nextTick(() => callback());
-    }),
-    close: jest.fn(),
-    isOpen: true,
-  })),
-  list: jest.fn().mockResolvedValue([
-    {
-      path: "COM3",
-      manufacturer: "Bluetooth Printer",
-      pnpId: "BLUETOOTH\\PRINTER\\1234",
+      close() {}
     },
-    {
-      path: "COM5",
-      manufacturer: "Standard Serial over Bluetooth link",
-      pnpId: "BLUETOOTH\\DEVICE\\5678",
-    },
-    {
-      path: "COM10",
-      manufacturer: "Generic USB Device",
-      pnpId: "USB\\DEVICE\\9012",
-    },
-    { virtual: true },
-  ]),
-}));
+    list: jest.fn().mockResolvedValue([
+      {
+        path: "COM3",
+        manufacturer: "Bluetooth Printer",
+        pnpId: "BLUETOOTH\\PRINTER\\1234",
+      },
+      {
+        path: "COM5",
+        manufacturer: "Standard Serial over Bluetooth link",
+        pnpId: "BLUETOOTH\\DEVICE\\5678",
+      },
+    ]),
+  }),
+  { virtual: false },
+);
 
 describe("BluetoothPrinter", () => {
   let printer;
