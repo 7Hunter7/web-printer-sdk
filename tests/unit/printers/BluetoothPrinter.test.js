@@ -69,10 +69,17 @@ describe("BluetoothPrinter", () => {
 
     test("should handle discovery errors gracefully", async () => {
       const { SerialPort } = require("serialport");
-      SerialPort.list.mockRejectedValueOnce(new Error("Connection failed"));
+      // Сохраняем оригинальную функцию
+      const originalList = SerialPort.list;
+      SerialPort.list = jest
+        .fn()
+        .mockRejectedValueOnce(new Error("Connection failed"));
 
       const printers = await printer.discover();
       expect(printers).toEqual([]);
+
+      // Восстанавливаем
+      SerialPort.list = originalList;
     });
   });
 
