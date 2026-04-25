@@ -1,8 +1,14 @@
-import sharp from 'sharp';
+import sharp from "sharp";
 
 class ImageProcessor {
   constructor() {
-    this.supportedFormats = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp'];
+    this.supportedFormats = [
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "image/gif",
+      "image/bmp",
+    ];
     this.maxSize = 2 * 1024 * 1024; // 2MB
   }
 
@@ -11,13 +17,17 @@ class ImageProcessor {
    */
   validateImage(file) {
     if (!this.supportedFormats.includes(file.type)) {
-      throw new Error(`Unsupported image format. Supported: ${this.supportedFormats.join(', ')}`);
+      throw new Error(
+        `Unsupported image format. Supported: ${this.supportedFormats.join(", ")}`,
+      );
     }
-    
+
     if (file.size > this.maxSize) {
-      throw new Error(`Image size exceeds ${this.maxSize / 1024 / 1024}MB limit`);
+      throw new Error(
+        `Image size exceeds ${this.maxSize / 1024 / 1024}MB limit`,
+      );
     }
-    
+
     return true;
   }
 
@@ -38,10 +48,8 @@ class ImageProcessor {
   async resizeImage(imageBuffer, width, height = null) {
     const options = { width };
     if (height) options.height = height;
-    
-    return await sharp(imageBuffer)
-      .resize(options)
-      .toBuffer();
+
+    return await sharp(imageBuffer).resize(options).toBuffer();
   }
 
   /**
@@ -49,41 +57,40 @@ class ImageProcessor {
    */
   async convertToEscPos(imageBuffer, options = {}) {
     const {
-      width = 384,      // стандартная ширина для 58mm принтера
+      width = 384, // стандартная ширина для 58mm принтера
       threshold = 128,
-      dithering = false
+      dithering = false,
     } = options;
-    
+
     // Сначала изменяем размер
     const resized = await this.resizeImage(imageBuffer, width);
-    
     // Конвертируем в черно-белое
     const monochrome = await this.convertToMonochrome(resized, threshold);
-    
     // Получаем метаданные
     const metadata = await sharp(monochrome).metadata();
-    
     // Генерируем ESC/POS команды для изображения
     const commands = [];
-    
     // Команда для печати изображения (ESC * для графики)
-    commands.push(0x1D, 0x76, 0x30, 0x00); // GS v 0 (печать растрового изображения)
-    
+    commands.push(0x1d, 0x76, 0x30, 0x00); // GS v 0 (печать растрового изображения)
+
     // Ширина и высота в байтах
     const widthBytes = Math.ceil(metadata.width / 8);
-    commands.push((widthBytes >> 8) & 0xFF, widthBytes & 0xFF);
-    commands.push((metadata.height >> 8) & 0xFF, metadata.height & 0xFF);
-    
+    commands.push((widthBytes >> 8) & 0xff, widthBytes & 0xff);
+    commands.push((metadata.height >> 8) & 0xff, metadata.height & 0xff);
     // Получаем данные пикселей
     const { data } = await sharp(monochrome)
-      .raw()
-      .toBuffer({ resolveWithObject: true });
-    
+    // .raw() устарел, данные уже в raw формате
+    .toBuffer({ resolveWithObject: true });
+
     // Конвертируем в битовую маску
-    const bitData = this.convertToBitMask(data, metadata.width, metadata.height);
-    
+    const bitData = this.convertToBitMask(
+      data,
+      metadata.width,
+      metadata.height,
+    );
+
     commands.push(...bitData);
-    
+
     return Buffer.from(commands);
   }
 
@@ -93,7 +100,7 @@ class ImageProcessor {
   convertToBitMask(pixels, width, height) {
     const widthBytes = Math.ceil(width / 8);
     const result = [];
-    
+
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x += 8) {
         let byte = 0;
@@ -103,14 +110,14 @@ class ImageProcessor {
             const pixel = pixels[idx];
             // Если пиксель темный (черный) - ставим 1
             if (pixel < 128) {
-              byte |= (1 << (7 - bit));
+              byte |= 1 << (7 - bit);
             }
           }
         }
         result.push(byte);
       }
     }
-    
+
     return result;
   }
 
@@ -119,23 +126,20 @@ class ImageProcessor {
    */
   async convertToZPL(imageBuffer, options = {}) {
     const {
-      width = 406,      // стандартная ширина для 4x6 дюймов
+      width = 406, // стандартная ширина для 4x6 дюймов
       height = null,
-      compression = true
+      compression = true,
     } = options;
-    
+
     // Изменяем размер
     let processed = await this.resizeImage(imageBuffer, width, height);
-    
     // Конвертируем в черно-белое
     processed = await this.convertToMonochrome(processed);
-    
     // Конвертируем в base64
-    const base64 = processed.toString('base64');
-    
+    const base64 = processed.toString("base64");
     // ZPL команда для изображения
     let zpl = `^FO50,50^GFA,${base64.length},${base64.length},${Math.ceil(width / 8)},${base64}^FS`;
-    
+
     return Buffer.from(zpl);
   }
 
@@ -149,7 +153,7 @@ class ImageProcessor {
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Sticker - ${data.id || 'Unknown'}</title>
+          <title>Sticker - ${data.id || "Unknown"}</title>
           <style>
             * {
               margin: 0;
@@ -245,20 +249,20 @@ class ImageProcessor {
           <div class="sticker">
             <div class="sticker-content">
               <div class="sticker-logo">
-                <img src="${data.logoUrl || '/Logo.png'}" alt="Logo" />
+                <img src="${data.logoUrl || "/Logo.png"}" alt="Logo" />
               </div>
               <div class="sticker-waste-type">
-                <span>${data.wasteIcon || '🗑️'}</span>
-                <span>${data.wasteType || 'Waste'}</span>
+                <span>${data.wasteIcon || "🗑️"}</span>
+                <span>${data.wasteType || "Waste"}</span>
               </div>
               <div class="sticker-divider">
                 <div class="sticker-info-row">
                   <span class="sticker-label">Address:</span>
-                  <span class="sticker-value">${data.address || '—'}</span>
+                  <span class="sticker-value">${data.address || "—"}</span>
                 </div>
                 <div class="sticker-info-row">
                   <span class="sticker-label">Weight:</span>
-                  <span class="sticker-value">${data.weight || '0'} kg</span>
+                  <span class="sticker-value">${data.weight || "0"} kg</span>
                 </div>
                 <div class="sticker-info-row">
                   <span class="sticker-label">Date:</span>
@@ -281,7 +285,7 @@ class ImageProcessor {
    * Генерация изображения через Puppeteer (Server-side)
    */
   async generateStickerImage(stickerData, usePuppeteer = false) {
-    if (usePuppeteer && typeof window === 'undefined') {
+    if (usePuppeteer && typeof window === "undefined") {
       return await this._generateWithPuppeteer(stickerData);
     }
     return this.generateStickerHTML(stickerData);
@@ -291,29 +295,36 @@ class ImageProcessor {
    * Генерация через Puppeteer (для сервера)
    */
   async _generateWithPuppeteer(stickerData) {
-    const puppeteer = await import('puppeteer');
+    const puppeteer = await import("puppeteer");
     const browser = await puppeteer.launch({ headless: true });
-    
+
     try {
       const page = await browser.newPage();
       await page.setViewport({ width: 396, height: 526 });
       await page.setContent(this.generateStickerHTML(stickerData));
-      
+
       // Добавляем штрихкод
-      await page.evaluate((barcodeData) => {
-        if (typeof JsBarcode !== 'undefined') {
-          const container = document.getElementById('barcode-container');
-          const canvas = document.createElement('canvas');
-          container.appendChild(canvas);
-          JsBarcode(canvas, barcodeData, { format: 'CODE128', width: 2, height: 40 });
-        }
-      }, stickerData.barcodeData || stickerData.id || Date.now().toString());
-      
+      await page.evaluate(
+        (barcodeData) => {
+          if (typeof JsBarcode !== "undefined") {
+            const container = document.getElementById("barcode-container");
+            const canvas = document.createElement("canvas");
+            container.appendChild(canvas);
+            JsBarcode(canvas, barcodeData, {
+              format: "CODE128",
+              width: 2,
+              height: 40,
+            });
+          }
+        },
+        stickerData.barcodeData || stickerData.id || Date.now().toString(),
+      );
+
       const screenshot = await page.screenshot({
-        type: 'png',
-        clip: { x: 0, y: 0, width: 396, height: 526 }
+        type: "png",
+        clip: { x: 0, y: 0, width: 396, height: 526 },
       });
-      
+
       return screenshot;
     } finally {
       await browser.close();
