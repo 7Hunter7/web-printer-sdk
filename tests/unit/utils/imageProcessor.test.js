@@ -1,8 +1,20 @@
-import ImageProcessor from '../../../src/utils/imageProcessor.js';
-import fs from 'fs';
-import path from 'path';
+import ImageProcessor from "../../../src/utils/imageProcessor.js";
+import fs from "fs";
+import path from "path";
 
-describe('ImageProcessor', () => {
+// Мокаем sharp
+jest.mock("sharp", () => {
+  return jest.fn().mockImplementation(() => ({
+    grayscale: jest.fn().mockReturnThis(),
+    threshold: jest.fn().mockReturnThis(),
+    png: jest.fn().mockReturnThis(),
+    toBuffer: jest.fn().mockResolvedValue(Buffer.from("test")),
+    resize: jest.fn().mockReturnThis(),
+    metadata: jest.fn().mockResolvedValue({ width: 100, height: 100 }),
+  }));
+});
+
+describe("ImageProcessor", () => {
   let processor;
   let testImageBuffer;
 
@@ -12,39 +24,39 @@ describe('ImageProcessor', () => {
     testImageBuffer = Buffer.from([0]);
   });
 
-  test('should validate image format', () => {
-    const validFile = { type: 'image/png', size: 1024 };
-    const invalidFile = { type: 'video/mp4', size: 1024 };
-    
+  test("should validate image format", () => {
+    const validFile = { type: "image/png", size: 1024 };
+    const invalidFile = { type: "video/mp4", size: 1024 };
+
     expect(() => processor.validateImage(validFile)).not.toThrow();
     expect(() => processor.validateImage(invalidFile)).toThrow();
   });
 
-  test('should validate image size', () => {
-    const largeFile = { type: 'image/png', size: 3 * 1024 * 1024 };
+  test("should validate image size", () => {
+    const largeFile = { type: "image/png", size: 3 * 1024 * 1024 };
     expect(() => processor.validateImage(largeFile)).toThrow();
   });
 
-  test('should convert to monochrome', async () => {
+  test("should convert to monochrome", async () => {
     const result = await processor.convertToMonochrome(testImageBuffer);
     expect(result).toBeInstanceOf(Buffer);
     expect(result.length).toBeGreaterThan(0);
   });
 
-  test('should resize image', async () => {
+  test("should resize image", async () => {
     const result = await processor.resizeImage(testImageBuffer, 100);
     expect(result).toBeInstanceOf(Buffer);
   });
 
-  test('should convert to ESC/POS format', async () => {
+  test("should convert to ESC/POS format", async () => {
     const result = await processor.convertToEscPos(testImageBuffer);
     expect(result).toBeInstanceOf(Buffer);
     expect(result.length).toBeGreaterThan(0);
   });
 
-  test('should generate sticker HTML', () => {
-    const html = processor.generateStickerHTML({ wasteType: 'Plastic' });
-    expect(html).toContain('<!DOCTYPE html>');
-    expect(html).toContain('Plastic');
+  test("should generate sticker HTML", () => {
+    const html = processor.generateStickerHTML({ wasteType: "Plastic" });
+    expect(html).toContain("<!DOCTYPE html>");
+    expect(html).toContain("Plastic");
   });
 });
