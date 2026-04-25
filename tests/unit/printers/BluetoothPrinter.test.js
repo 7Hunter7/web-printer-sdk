@@ -1,6 +1,6 @@
 import BluetoothPrinter from "../../../src/printers/BluetoothPrinter.js";
 import { PrinterError, ErrorCodes } from "../../../src/core/PrinterError.js";
-const isNodeEnvironment = typeof window === 'undefined';
+const isNodeEnvironment = typeof window === "undefined";
 
 // Мокаем serialport
 jest.mock(
@@ -83,7 +83,7 @@ describe("BluetoothPrinter", () => {
         path: "COM3",
         manufacturer: "Bluetooth Printer",
         name: expect.stringContaining("Bluetooth Printer"),
-        type: "bluetooth-serial",
+        type: "bluetooth",
       });
     });
 
