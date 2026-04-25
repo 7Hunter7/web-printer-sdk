@@ -1,14 +1,16 @@
-import WifiPrinter from '../printers/WifiPrinter.js';
-import BluetoothPrinter from '../printers/BluetoothPrinter.js';
-import UsbPrinter from '../printers/UsbPrinter.js';
-import { PrinterError, ErrorCodes } from './PrinterError.js';
+import WifiPrinter from "../printers/WifiPrinter.js";
+import BluetoothPrinter from "../printers/BluetoothPrinter.js";
+import UsbPrinter from "../printers/UsbPrinter.js";
+import VirtualPrinter from "../printers/VirtualPrinter.js";
+import { PrinterError, ErrorCodes } from "./PrinterError.js";
 
 class PrinterManager {
   constructor() {
     this.printers = {
       wifi: WifiPrinter,
       bluetooth: BluetoothPrinter,
-      usb: UsbPrinter
+      usb: UsbPrinter,
+      virtual: VirtualPrinter,
     };
     this.activePrinter = null;
     this.printerType = null;
@@ -17,13 +19,16 @@ class PrinterManager {
   /**
    * Выбор типа принтера
    * @param {string} type - 'wifi', 'bluetooth', 'usb'
-   * @param {Object} config 
+   * @param {Object} config
    */
   setPrinterType(type, config = {}) {
     if (!this.printers[type]) {
-      throw new PrinterError(ErrorCodes.UNSUPPORTED_TYPE, `Unsupported printer type: ${type}`);
+      throw new PrinterError(
+        ErrorCodes.UNSUPPORTED_TYPE,
+        `Unsupported printer type: ${type}`,
+      );
     }
-    
+
     this.printerType = type;
     this.activePrinter = new this.printers[type](config);
     return this.activePrinter;
@@ -34,7 +39,10 @@ class PrinterManager {
    */
   async discover() {
     if (!this.activePrinter) {
-      throw new PrinterError(ErrorCodes.NO_PRINTER_SELECTED, 'No printer type selected');
+      throw new PrinterError(
+        ErrorCodes.NO_PRINTER_SELECTED,
+        "No printer type selected",
+      );
     }
     return await this.activePrinter.discover();
   }
@@ -44,7 +52,10 @@ class PrinterManager {
    */
   async connect(config) {
     if (!this.activePrinter) {
-      throw new PrinterError(ErrorCodes.NO_PRINTER_SELECTED, 'No printer type selected');
+      throw new PrinterError(
+        ErrorCodes.NO_PRINTER_SELECTED,
+        "No printer type selected",
+      );
     }
     return await this.activePrinter.connect(config);
   }
@@ -54,10 +65,16 @@ class PrinterManager {
    */
   async print(data) {
     if (!this.activePrinter) {
-      throw new PrinterError(ErrorCodes.NO_PRINTER_SELECTED, 'No printer type selected');
+      throw new PrinterError(
+        ErrorCodes.NO_PRINTER_SELECTED,
+        "No printer type selected",
+      );
     }
     if (!this.activePrinter.getConnected()) {
-      throw new PrinterError(ErrorCodes.NOT_CONNECTED, 'Printer is not connected');
+      throw new PrinterError(
+        ErrorCodes.NOT_CONNECTED,
+        "Printer is not connected",
+      );
     }
     return await this.activePrinter.print(data);
   }
