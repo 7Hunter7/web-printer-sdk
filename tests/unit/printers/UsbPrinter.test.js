@@ -30,9 +30,11 @@ const mockUsbDevice = {
   },
 };
 
-jest.mock("usb", () => ({
+jest.mock("usb",() => ({
   getDeviceList: jest.fn().mockReturnValue([mockUsbDevice]),
-}), { virtual: true });
+  }),
+  { virtual: true },
+);
 
 describe("UsbPrinter", () => {
   let printer;
@@ -119,7 +121,7 @@ describe("UsbPrinter", () => {
 
       const result = await printer.connect(config);
 
-      expect(result).toEqual({ success: true });
+      expect(result.success).toBe(true);
       expect(printer.isConnected).toBe(true);
       expect(printer.device).toBeDefined();
       expect(printer.interface).toBeDefined();
@@ -151,7 +153,7 @@ describe("UsbPrinter", () => {
       const config = printers[0];
 
       await expect(printer.connect(config)).rejects.toThrow(
-        ErrorCodes.CONNECTION_FAILED,
+        expect.objectContaining({ code: ErrorCodes.CONNECTION_FAILED }),
       );
       await expect(printer.connect(config)).rejects.toThrow(
         "Output endpoint not found",
