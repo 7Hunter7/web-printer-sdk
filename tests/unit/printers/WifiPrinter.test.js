@@ -66,7 +66,7 @@ describe("WifiPrinter", () => {
       if (errorCallback) {
         errorCallback[1](new Error("Timeout"));
       }
-    }, 50);
+    }, 2000);
 
     await expect(printer.connect(config)).rejects.toThrow();
   });
