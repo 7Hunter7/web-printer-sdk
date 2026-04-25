@@ -1,6 +1,7 @@
-import ImageProcessor from "../../../src/utils/imageProcessor.js";
 import fs from "fs";
 import path from "path";
+import ImageProcessorClass from '../../../src/utils/imageProcessor.js';
+const ImageProcessor = ImageProcessorClass;
 
 // Мокаем sharp
 jest.mock("sharp", () => {
