@@ -151,9 +151,14 @@ describe("UsbPrinter", () => {
         interface: jest.fn(() => ({
           ...mockUsbInterface,
           endpoints: [], // Нет endpoint'ов
+          claim: jest.fn(),
+          release: jest.fn(),
+          isKernelDriverActive: jest.fn().mockReturnValue(false),
         })),
       };
-      usb.getDeviceList.mockReturnValueOnce([deviceWithoutEndpoint]);
+
+      const originalGetDeviceList = usb.getDeviceList;
+      usb.getDeviceList = jest.fn().mockReturnValue([deviceWithoutEndpoint]);
 
       const printers = await printer.discover();
       const config = printers[0];
@@ -164,6 +169,8 @@ describe("UsbPrinter", () => {
       await expect(printer.connect(config)).rejects.toThrow(
         "Output endpoint not found",
       );
+
+      usb.getDeviceList = originalGetDeviceList;
     });
   });
 
