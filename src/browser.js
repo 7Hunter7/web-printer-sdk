@@ -21,9 +21,9 @@ export { printerMixin } from './vue/printerMixin.js';
 // Версия
 export const VERSION = '1.0.3';
 
-// Функция-заглушка для ImageProcessor
-export class ImageProcessor {
-  constructor() {
-    throw new Error('ImageProcessor is only available in Node.js environment. Use web-printer-sdk/node.js instead.');
-  }
+// Функция-заглушка для createPrinter
+export async function createPrinter(type, config) {
+  const manager = new PrinterManager();
+  manager.setPrinterType(type, config);
+  return manager;
 }
