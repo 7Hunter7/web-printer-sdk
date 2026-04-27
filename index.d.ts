@@ -1,4 +1,6 @@
 // TypeScript определения
+
+// ========== БРАУЗЕРНАЯ ВЕРСИЯ (без Node.js зависимостей) ==========
 declare module "web-printer-sdk" {
   // ========== Типы ошибок ==========
   export interface ErrorCodesType {
@@ -15,7 +17,7 @@ declare module "web-printer-sdk" {
 
   // ========== Основные интерфейсы ==========
   export interface PrinterConfig {
-    type: "wifi" | "bluetooth" | "usb" | "thermal" | "virtual";
+    type: "wifi" | "bluetooth" | "usb" | "virtual";
     ip?: string;
     port?: number;
     path?: string;
@@ -46,7 +48,7 @@ declare module "web-printer-sdk" {
     productId?: number;
   }
 
-  // ========== Классы ==========
+  // ========== Классы (только клиентские) ==========
   export class PrinterError extends Error {
     code: string;
   }
@@ -63,7 +65,6 @@ declare module "web-printer-sdk" {
   export class WifiPrinter extends BasePrinter {}
   export class BluetoothPrinter extends BasePrinter {}
   export class UsbPrinter extends BasePrinter {}
-  export class ThermalPrinter extends BasePrinter {}
   export class VirtualPrinter extends BasePrinter {}
 
   export class PrinterManager {
@@ -198,8 +199,48 @@ declare module "web-printer-sdk" {
   export function createWasteLabel(wasteData: Record<string, any>): Buffer;
   export function serializeZPL(zplString: string): Buffer;
 
-  // ========== ImageProcessor интерфейсы ==========
+  // ========== Утилиты ==========
+  export function createPrinter(
+    type: string,
+    config?: PrinterConfig,
+  ): Promise<PrinterManager>;
+
+  export const VERSION: string;
+
+  // ========== Экспорт по умолчанию ==========
+  const webPrinterSDK: {
+    PrinterManager: typeof PrinterManager;
+    BasePrinter: typeof BasePrinter;
+    PrinterError: typeof PrinterError;
+    ErrorCodes: typeof ErrorCodes;
+    WifiPrinter: typeof WifiPrinter;
+    BluetoothPrinter: typeof BluetoothPrinter;
+    UsbPrinter: typeof UsbPrinter;
+    VirtualPrinter: typeof VirtualPrinter;
+    ESCPOS: typeof ESCPOS;
+    ZPL: typeof ZPL;
+    createTextLine: typeof createTextLine;
+    createReceipt: typeof createReceipt;
+    createLabel: typeof createLabel;
+    createWasteLabel: typeof createWasteLabel;
+    serializeZPL: typeof serializeZPL;
+    printerMixin: typeof printerMixin;
+    createPrinter: typeof createPrinter;
+    VERSION: string;
+  };
+
+  export default webPrinterSDK;
+}
+
+// ========== СЕРВЕРНАЯ ВЕРСИЯ (со всем функционалом) ==========
+declare module "web-printer-sdk/node" {
+  // Всё из браузерной версии
+  export * from "web-printer-sdk";
+  // Серверные классы
+  export class ThermalPrinter extends BasePrinter {}
+  // ImageProcessor
   export class ImageProcessor {
+    constructor();
     validateImage(file: File): boolean;
     convertToMonochrome(
       imageBuffer: Buffer,
@@ -218,38 +259,4 @@ declare module "web-printer-sdk" {
       usePuppeteer?: boolean,
     ): Promise<string | Buffer>;
   }
-
-  // ========== Утилиты ==========
-  export function createPrinter(
-    type: string,
-    config?: PrinterConfig,
-  ): Promise<PrinterManager>;
-
-  export const VERSION: string;
-
-  // ========== Экспорт по умолчанию ==========
-  const webPrinterSDK: {
-    PrinterManager: typeof PrinterManager;
-    BasePrinter: typeof BasePrinter;
-    PrinterError: typeof PrinterError;
-    ErrorCodes: typeof ErrorCodes;
-    WifiPrinter: typeof WifiPrinter;
-    BluetoothPrinter: typeof BluetoothPrinter;
-    UsbPrinter: typeof UsbPrinter;
-    ThermalPrinter: typeof ThermalPrinter;
-    VirtualPrinter: typeof VirtualPrinter;
-    ESCPOS: typeof ESCPOS;
-    ZPL: typeof ZPL;
-    createTextLine: typeof createTextLine;
-    createReceipt: typeof createReceipt;
-    createLabel: typeof createLabel;
-    createWasteLabel: typeof createWasteLabel;
-    serializeZPL: typeof serializeZPL;
-    ImageProcessor: typeof ImageProcessor;
-    printerMixin: typeof printerMixin;
-    createPrinter: typeof createPrinter;
-    VERSION: string;
-  };
-
-  export default webPrinterSDK;
 }

@@ -32,10 +32,6 @@
       "import": "./src/utils/escpos.js",
       "require": "./src/utils/escpos.js"
     },
-    "./imageProcessor": {
-      "import": "./src/utils/imageProcessor.js",
-      "require": "./src/utils/imageProcessor.js"
-    },
     "./vue": {
       "import": "./src/vue/printerMixin.js",
       "require": "./src/vue/printerMixin.js"
