@@ -297,39 +297,47 @@ class ImageProcessor {
    * Генерация через Puppeteer (для сервера)
    */
   async _generateWithPuppeteer(stickerData) {
-    const puppeteer = await import("puppeteer");
-    const browser = await puppeteer.launch({ headless: true });
+    if (typeof window !== "undefined") {
+      throw new Error("Puppeteer is only available in Node.js environment");
+    }
 
     try {
-      const page = await browser.newPage();
-      await page.setViewport({ width: 396, height: 526 });
-      await page.setContent(this.generateStickerHTML(stickerData));
+      const puppeteer = await import("puppeteer");
+      const browser = await puppeteer.launch({ headless: true });
+      try {
+        const page = await browser.newPage();
+        await page.setViewport({ width: 396, height: 526 });
+        await page.setContent(this.generateStickerHTML(stickerData));
 
-      // Добавляем штрихкод
-      await page.evaluate(
-        (barcodeData) => {
-          if (typeof JsBarcode !== "undefined") {
-            const container = document.getElementById("barcode-container");
-            const canvas = document.createElement("canvas");
-            container.appendChild(canvas);
-            JsBarcode(canvas, barcodeData, {
-              format: "CODE128",
-              width: 2,
-              height: 40,
-            });
-          }
-        },
-        stickerData.barcodeData || stickerData.id || Date.now().toString(),
-      );
+        // Добавляем штрихкод
+        await page.evaluate(
+          (barcodeData) => {
+            if (typeof JsBarcode !== "undefined") {
+              const container = document.getElementById("barcode-container");
+              const canvas = document.createElement("canvas");
+              container.appendChild(canvas);
+              JsBarcode(canvas, barcodeData, {
+                format: "CODE128",
+                width: 2,
+                height: 40,
+              });
+            }
+          },
+          stickerData.barcodeData || stickerData.id || Date.now().toString(),
+        );
 
-      const screenshot = await page.screenshot({
-        type: "png",
-        clip: { x: 0, y: 0, width: 396, height: 526 },
-      });
+        const screenshot = await page.screenshot({
+          type: "png",
+          clip: { x: 0, y: 0, width: 396, height: 526 },
+        });
 
-      return screenshot;
-    } finally {
-      await browser.close();
+        return screenshot;
+      } finally {
+        await browser.close();
+      }
+    } catch (error) {
+      console.error("Puppeteer error:", error);
+      throw error;
     }
   }
 }
