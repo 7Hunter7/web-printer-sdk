@@ -1,6 +1,6 @@
 {
   "name": "web-printer-sdk",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Профессиональный пакет SDK для подключения принтеров к веб-приложениям. Поддерживает Wi-Fi, Bluetooth, USB и термопринтеры с ESC/POS и ZPL командами.",
   "main": "src/index.js",
   "module": "src/index.js",
@@ -12,6 +12,29 @@
     "README.md",
     "LICENSE"
   ],
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js",
+      "types": "./index.d.ts"
+    },
+    "./zpl": {
+      "import": "./src/utils/zpl.js",
+      "require": "./src/utils/zpl.js"
+    },
+    "./escpos": {
+      "import": "./src/utils/escpos.js",
+      "require": "./src/utils/escpos.js"
+    },
+    "./imageProcessor": {
+      "import": "./src/utils/imageProcessor.js",
+      "require": "./src/utils/imageProcessor.js"
+    },
+    "./vue": {
+      "import": "./src/vue/printerMixin.js",
+      "require": "./src/vue/printerMixin.js"
+    }
+  },
   "scripts": {
     "test": "echo \"No tests in production\" && exit 0"
   },

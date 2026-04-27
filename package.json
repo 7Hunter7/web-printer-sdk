@@ -12,6 +12,29 @@
     "README.md",
     "LICENSE"
   ],
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js",
+      "types": "./index.d.ts"
+    },
+    "./zpl": {
+      "import": "./src/utils/zpl.js",
+      "require": "./src/utils/zpl.js"
+    },
+    "./escpos": {
+      "import": "./src/utils/escpos.js",
+      "require": "./src/utils/escpos.js"
+    },
+    "./imageProcessor": {
+      "import": "./src/utils/imageProcessor.js",
+      "require": "./src/utils/imageProcessor.js"
+    },
+    "./vue": {
+      "import": "./src/vue/printerMixin.js",
+      "require": "./src/vue/printerMixin.js"
+    }
+  },
   "scripts": {
     "test": "echo \"No tests in production\" && exit 0"
   },
