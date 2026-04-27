@@ -1,5 +1,19 @@
 // TypeScript определения
 declare module "web-printer-sdk" {
+  // ========== Типы ошибок ==========
+  export interface ErrorCodesType {
+    DISCOVERY_FAILED: string;
+    CONNECTION_FAILED: string;
+    NOT_CONNECTED: string;
+    PRINT_FAILED: string;
+    UNSUPPORTED_TYPE: string;
+    MISSING_CONFIG: string;
+    NO_PRINTER_SELECTED: string;
+  }
+
+  export const ErrorCodes: ErrorCodesType;
+
+  // ========== Основные интерфейсы ==========
   export interface PrinterConfig {
     type: "wifi" | "bluetooth" | "usb" | "thermal" | "virtual";
     ip?: string;
@@ -32,6 +46,7 @@ declare module "web-printer-sdk" {
     productId?: number;
   }
 
+  // ========== Классы ==========
   export class PrinterError extends Error {
     code: string;
   }
@@ -61,15 +76,13 @@ declare module "web-printer-sdk" {
     getPrinter(): BasePrinter | null;
   }
 
+  // ========== Vue миксин ==========
   export const printerMixin: any;
+
+  // ========== ESC/POS ==========
   export const ESCPOS: any;
-
-  export function createPrinter(
-    type: string,
-    config?: PrinterConfig,
-  ): Promise<PrinterManager>;
-
-  export const VERSION: string;
+  export function createTextLine(text: string, alignment?: string): Buffer;
+  export function createReceipt(items: any[], total: number): Buffer;
 
   // ========== ZPL интерфейсы ==========
   export interface BarcodeOptions {
@@ -206,9 +219,13 @@ declare module "web-printer-sdk" {
     ): Promise<string | Buffer>;
   }
 
-  // ========== ESC/POS интерфейсы ==========
-  export function createTextLine(text: string, alignment?: string): Buffer;
-  export function createReceipt(items: any[], total: number): Buffer;
+  // ========== Утилиты ==========
+  export function createPrinter(
+    type: string,
+    config?: PrinterConfig,
+  ): Promise<PrinterManager>;
+
+  export const VERSION: string;
 
   // ========== Экспорт по умолчанию ==========
   const webPrinterSDK: {
@@ -230,6 +247,7 @@ declare module "web-printer-sdk" {
     serializeZPL: typeof serializeZPL;
     ImageProcessor: typeof ImageProcessor;
     printerMixin: typeof printerMixin;
+    createPrinter: typeof createPrinter;
     VERSION: string;
   };
 
