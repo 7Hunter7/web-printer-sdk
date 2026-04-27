@@ -63,9 +63,6 @@ declare module "web-printer-sdk" {
 
   export const printerMixin: any;
   export const ESCPOS: any;
-  export const ZPL: any;
-  export const createTextLine: (text: string, alignment?: string) => Buffer;
-  export const createReceipt: (items: any[], total: number) => Buffer;
 
   export function createPrinter(
     type: string,
@@ -74,7 +71,61 @@ declare module "web-printer-sdk" {
 
   export const VERSION: string;
 
-  // ZPL интерфейсы
+  // ========== ZPL интерфейсы ==========
+  export interface BarcodeOptions {
+    x?: number;
+    y?: number;
+    height?: number;
+    readable?: boolean;
+  }
+
+  export interface QROptions {
+    x?: number;
+    y?: number;
+    size?: number;
+  }
+
+  export interface TextOptions {
+    x?: number;
+    y?: number;
+    font?: string;
+    size?: string;
+  }
+
+  export interface LineOptions {
+    width?: number;
+  }
+
+  export interface RectangleOptions {
+    borderWidth?: number;
+    color?: "B" | "W";
+  }
+
+  export interface CircleOptions {
+    borderWidth?: number;
+  }
+
+  export interface ImageOptions {
+    x?: number;
+    y?: number;
+    totalBytes?: number;
+    bytesPerRow?: number;
+  }
+
+  export interface LabelData {
+    header?: string;
+    barcode?: string;
+    qrcode?: string;
+    fields?: Array<{ label: string; value: string }>;
+  }
+
+  export interface LabelOptions {
+    orientation?: "portrait" | "landscape" | "inverted";
+    width?: number;
+    height?: number;
+  }
+
+  // ZPL объект
   export const ZPL: {
     start: string;
     end: string;
@@ -130,64 +181,11 @@ declare module "web-printer-sdk" {
     };
   };
 
-  export interface BarcodeOptions {
-    x?: number;
-    y?: number;
-    height?: number;
-    readable?: boolean;
-  }
-
-  export interface QROptions {
-    x?: number;
-    y?: number;
-    size?: number;
-  }
-
-  export interface TextOptions {
-    x?: number;
-    y?: number;
-    font?: string;
-    size?: string;
-  }
-
-  export interface LineOptions {
-    width?: number;
-  }
-
-  export interface RectangleOptions {
-    borderWidth?: number;
-    color?: "B" | "W";
-  }
-
-  export interface CircleOptions {
-    borderWidth?: number;
-  }
-
-  export interface ImageOptions {
-    x?: number;
-    y?: number;
-    totalBytes?: number;
-    bytesPerRow?: number;
-  }
-
-  export interface LabelData {
-    header?: string;
-    barcode?: string;
-    qrcode?: string;
-    fields?: Array<{ label: string; value: string }>;
-  }
-
-  export interface LabelOptions {
-    orientation?: "portrait" | "landscape" | "inverted";
-    width?: number;
-    height?: number;
-  }
-
   export function createLabel(data: LabelData, options?: LabelOptions): Buffer;
   export function createWasteLabel(wasteData: Record<string, any>): Buffer;
   export function serializeZPL(zplString: string): Buffer;
 
-  // ImageProcessor интерфейсы
+  // ========== ImageProcessor интерфейсы ==========
   export class ImageProcessor {
     validateImage(file: File): boolean;
     convertToMonochrome(
@@ -208,7 +206,11 @@ declare module "web-printer-sdk" {
     ): Promise<string | Buffer>;
   }
 
-  // printerMixin интерфейсы
+  // ========== ESC/POS интерфейсы ==========
+  export function createTextLine(text: string, alignment?: string): Buffer;
+  export function createReceipt(items: any[], total: number): Buffer;
+
+  // ========== Экспорт по умолчанию ==========
   const webPrinterSDK: {
     PrinterManager: typeof PrinterManager;
     BasePrinter: typeof BasePrinter;
